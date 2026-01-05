@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jmachina.io: µW-scale intelligence systems for battery-free ML</title>
+    <title>jmachina.io: µW-scale intelligence systems for battery-free ML at the edge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
@@ -463,6 +463,7 @@
             margin: 2rem 0;
             background: rgba(42, 42, 42, 0.03);
             box-shadow: 0 0 3px rgba(42, 42, 42, 0.1);
+            overflow: auto;
         }
 
         .terminal-header {
@@ -477,7 +478,7 @@
         }
 
         .terminal-box img {
-            max-width: 300px;
+            max-width: min(300px, 100%);
             float: right;
             margin-left: 2rem;
             margin-bottom: 1.5rem;
@@ -908,13 +909,13 @@
                 <div class="terminal-box">
                     <div class="terminal-header">RUNNING_DIAGNOSTIC: TRACK_RECORD</div>
                     <img src="assets/MiceGroup.jpg" alt="Track Record">
-                    <p>Ambient Photonics: Secured $109M in pre-sales by demonstrating product-market fit to brands and partners including Amazon, Samsung, and Google.</p>
+                    <p><strong>Ambient Photonics:</strong> Secured $109M in pre-sales by demonstrating product-market fit to brands and partners including Amazon, Samsung, and Google.</p>
                     <br>
-                    <p>Fitbit: Led the hardware and firmware for Advanced Product Development, expanding the TAM for wearable tech.</p>
+                    <p><strong>Fitbit:</strong> Led the hardware and firmware for Advanced Product Development, expanding the TAM for wearable tech.</p>
                     <br>
-                    <p>August Home: Delivered Video Doorbell, Smart Lock and Smart Keypad to market on time with >99% yield by flying to China with a soldering iron and debugger. Over. and. over.</p>
+                    <p><strong>August Home:</strong> Delivered Video Doorbell, Smart Lock and Smart Keypad to market on time with >99% yield by flying to China with a soldering iron and debugger. Over. and. over.</p>
                     <br>
-                    <p>Patents: Foundational patents in optical systems and energy harvesting.</p>
+                    <p><strong>Patents:</strong> Foundational patents in optical systems and energy harvesting.</p>
                 </div>
             </div>
         </div>
@@ -923,12 +924,17 @@
     <section id="problem">
         <div class="container">
             <div class="reveal">
-                <h1 class="glitch">THE POWER CRISIS</h1>
+                <h2>THE PROBLEM</h2>
                 <div class="terminal-box">
-                    <div class="terminal-header">Critical System Analysis</div>
-                    <p>The industry faces an unprecedented challenge: power infrastructure built for yesterday's demands, strained by tomorrow's requirements. Data centers consuming megawatts. Grid instability. Thermal runaway. Cascading failures.</p>
+                    <div class="terminal-header">WARNING: FIRM_POWER_IN_LOW_LIGHT</div>
+                    <img src="assets/BoxPlotsOfEnvironments.png" alt="Real World Illumination Data">
+                    <p><strong>Stop choosing the wrong tech for the wrong lux.</strong> The industry optimizes for bright windows and unrealistic use cases.</p>
                     <br>
-                    <p>Traditional solutions patch symptoms. We've identified the root cause.</p>
+                    <p><strong>The 155 Lux Reality:</strong> Datasheets claim performance at 200 lux. Real devices live in 155 lux (avg) and 1000 lux use cases. That's a -85% power delta before you even start.</p>
+                    <br>
+                    <p><strong>The "Lab-to-Fab" Gap:</strong> A prototype on a bench is not a product. Without an ecosystem strategy that accounts for lens loss, PMIC efficiency, and storage leakage, your battery-free ML model is just a paperweight.</p>
+                    <br>
+                    <p><strong>The "Always-On" Myth:</strong> Intelligence at the edge requires continuous power. Most harvesters brown out during the ~15 hours of daily darkness while powering local inference. We provide the data and the power architecture to bridge the gap.</p>
                 </div>
             </div>
         </div>
@@ -937,60 +943,54 @@
     <section id="capabilities">
         <div class="container">
             <div class="reveal">
-                <h2>THE SOLUTION</h2>
-                <div class="terminal-box">
-                    <div class="terminal-header">Engineering Breakthrough Detected</div>
-                    <p>Not incremental improvements. Not marginal gains. A fundamental rethinking of power delivery architecture at the silicon level.</p>
-                    <br>
-                    <ul>
-                        <li>Dynamic voltage scaling with microsecond precision</li>
-                        <li>Intelligent load balancing across distributed nodes</li>
-                        <li>Predictive power draw modeling using real-time telemetry</li>
-                        <li>Hardware-level efficiency gains: 40-60% reduction in waste heat</li>
-                        <li>Backward compatible with existing infrastructure</li>
-                    </ul>
-                    <br>
-                    <p>Proven in production. Validated under extreme load. Ready for deployment.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+                <h2>CAPABILITIES</h2>
 
-    <section id="technology">
-        <div class="container">
-            <div class="reveal">
-                <h2>TECHNICAL SPECIFICATIONS</h2>
                 <div class="terminal-box">
-                    <div class="terminal-header">Core Architecture Overview</div>
-                    <p><strong>Power Management Unit (PMU):</strong> Custom ASIC integrating voltage regulators, current sensors, and thermal monitoring in a single package. Sub-nanosecond response time to load changes.</p>
+                    <div class="terminal-header">ERROR: DATASHEET_MISMATCH_DETECTED</div>
+                    <img src="assets/PhysFig1.png" alt="Datasheet Delta">
+                    <p><strong>The Datasheet Delta.</strong></p>
                     <br>
-                    <p><strong>Distributed Control Fabric:</strong> Mesh network topology allowing individual nodes to communicate power state and coordinate load shedding without central bottleneck.</p>
-                    <br>
-                    <p><strong>Predictive Analytics Engine:</strong> ML-based forecasting of power requirements based on workload patterns. Pre-emptive scaling reduces latency and eliminates surge conditions.</p>
-                    <br>
-                    <p><strong>Thermal Management:</strong> Advanced heat dissipation through novel substrate materials and dynamic clock gating. Operating temperature reduced by 15-25°C under sustained load.</p>
+                    <p>Most low-light PV cells are optimized for 200 lux. But your device lives in a 155 lux reality (avg). We've characterized every major PV technology. The result? A massive delta between claimed and harvested power. If you design for the datasheet, your product dies in the field.</p>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="validation">
-        <div class="container">
-            <div class="reveal">
-                <h2>FIELD VALIDATION</h2>
                 <div class="terminal-box">
-                    <div class="terminal-header">Deployment Metrics - Production Environment</div>
-                    <p>24-month trial across 12 facilities. 50,000+ server nodes. Zero unplanned downtime.</p>
+                    <div class="terminal-header">OPTIMIZING: POWER_BUDGET</div>
+                    <img src="assets/PhysFig2.png" alt="Power Budget Optimization">
+                    <p><strong>Fixing the Math.</strong></p>
                     <br>
-                    <ul>
-                        <li>Average power reduction: 47.3%</li>
-                        <li>Peak efficiency gain: 58.1%</li>
-                        <li>Thermal incidents: 0</li>
-                        <li>ROI timeline: 8-14 months</li>
-                        <li>Mean time between failures: >180,000 hours</li>
-                    </ul>
+                    <p>It's not just about the cell; it's the system. Lens losses, PMIC boost efficiency, and storage leakage kill your budget. By optimizing the entire chain, matching the PV cell's voltage to the PMIC's sweet spot and minimizing optical losses, your customers can enjoy the security of endless power.</p>
+                </div>
+
+                <div class="terminal-box">
+                    <div class="terminal-header">STATUS: DEPLOYING_NOVEL_ARCHITECTURE</div>
+                    <img src="assets/MechFig1.png" alt="Novel Architecture">
+                    <p><strong>From Concept to Category Leader.</strong></p>
                     <br>
-                    <p>Independently audited. Results reproducible. The data doesn't lie.</p>
+                    <p>We don't just retrofit; we reimagine. We developed the world's first bifacial remote control architecture, harvesting energy from both the top and bottom of the device. This isn't just a cool feature, it increased daily energy harvest by 25%, enabling high-drain features like voice and backlight without batteries.</p>
+                </div>
+
+                <div class="terminal-box">
+                    <div class="terminal-header">INTEGRATING: AESTHETICS_AND_PHYSICS</div>
+                    <img src="assets/MechFig2.png" alt="Aesthetics and Physics">
+                    <p><strong>Invisible Power.</strong></p>
+                    <br>
+                    <p>Industrial Design hates solar panels. We fixed that. We developed direct-mount strategies and "deadfront" optical stacks that hide the PV cell completely without killing performance. You no longer have to choose between a beautiful product and a battery-free one.</p>
+                </div>
+
+                <div class="terminal-box">
+                    <div class="terminal-header">EXECUTING: REAL_WORLD_VALIDATION</div>
+                    <img src="assets/ExecFig1.jpg" alt="Real World Validation">
+                    <p><strong>Labs are fake. Kitchens are real.</strong></p>
+                    <br>
+                    <p>We don't rely on solar simulators. We deploy units into actual homes to log weeks of real-world illumination and harvesting performance data. We proved that a 155 lux average is the real design target, saving our partners from millions of dollars in returns due to under-powered devices.</p>
+                </div>
+
+                <div class="terminal-box">
+                    <div class="terminal-header">ANALYZING: FIELD_DATA</div>
+                    <img src="assets/ExecFig2.png" alt="Field Data Analysis">
+                    <p><strong>Data-Driven Decisions.</strong></p>
+                    <br>
+                    <p>By analyzing thousands of hours of field data, we identified the "Valley of Death", the specific times of day and use cases where batteries fail. We architected a hybrid storage solution to bridge these gaps, ensuring 100% uptime for always-on edge AI.</p>
                 </div>
             </div>
         </div>
@@ -1388,9 +1388,9 @@
 
         // Observe all sections
         sectionObserver.observe(document.querySelector('.boot-screen'));
+        sectionObserver.observe(document.getElementById('about'));
         sectionObserver.observe(document.getElementById('problem'));
         sectionObserver.observe(document.getElementById('capabilities'));
-        sectionObserver.observe(document.getElementById('about'));
         sectionObserver.observe(document.getElementById('contact'));
 
         // Map paths to section IDs
