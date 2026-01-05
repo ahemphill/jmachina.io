@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        // GitHub Pages SPA redirect workaround
+        // Capture the requested path and redirect to index.html with hashbang
+        var path = window.location.pathname;
+        var hash = window.location.hash;
+
+        // Redirect to index with the path preserved as a hashbang
+        window.location.replace(
+            window.location.origin + '/#!' + path + hash
+        );
+    </script>
+</head>
+<body>
+    <!-- This page handles 404 redirects for GitHub Pages SPA routing -->
+</body>
+</html>
