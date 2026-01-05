@@ -119,7 +119,6 @@ body::after {
 
 /* Boot sequence */
 .boot-screen {
-    min-height: 50vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -139,9 +138,6 @@ body::after {
 .boot-text.line-4 { animation-delay: 3.5s; }    /* BOOT_TIMING.line4 = 3500ms */
 .boot-text.line-5 { animation-delay: 6.5s; opacity: 0; }
 .boot-text.line-6 { animation-delay: 6.5s; opacity: 0; }
-.boot-text.line-7 { animation-delay: 6.5s; opacity: 0; }
-.boot-text.line-8 { animation-delay: 6.5s; opacity: 0; }
-.boot-text.line-9 { animation-delay: 6.5s; opacity: 0; }
 
 @keyframes fadeIn {
     to { opacity: 1; }
@@ -181,9 +177,7 @@ body::after {
 
 /* Make empty lines visible with min-height */
 .boot-text.line-5,
-.boot-text.line-6,
-.boot-text.line-7,
-.boot-text.line-8 {
+.boot-text.line-6 {
     min-height: 1.6em;
 }
 
@@ -289,6 +283,7 @@ nav .theme-toggle {
 nav.stuck {
     background: rgba(245, 245, 245, 0.98);
     backdrop-filter: blur(10px);
+    padding-top: 0.5rem;
 }
 
 nav.stuck::after {
@@ -572,9 +567,25 @@ button:hover {
     box-shadow: 0 0 3px rgba(42, 42, 42, 0.3);
 }
 
-/* Contact details indentation */
-.contact-detail {
-    margin-left: 2rem;
+/* Contact list */
+.contact-list {
+    list-style: none;
+    padding-left: 2rem;
+}
+
+.contact-list li {
+    display: grid;
+    grid-template-columns: 4ch 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact-list li::before {
+    content: none;
+}
+
+.contact-list li strong {
+    text-align: left;
 }
 
 /* Scanline effect */

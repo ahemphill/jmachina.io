@@ -20,18 +20,16 @@ const BOOT_TIMING = {
     cursorBlinkAtLine4: 6500,  // Blink 3 times at end of line-4 (3 cycles at 500ms each = 1500ms)
     cursorMoveLine5: 6500,     // Move to empty line 5
     cursorMoveLine6: 6700,     // Move to empty line 6
-    cursorMoveLine7: 6900,     // Move to empty line 7
-    cursorMoveLine8: 7100,     // Move to empty line 8
 
     // Typing animation
-    typingStart: 7100,         // When typing "jmachina.io" begins (no jump, starts right away)
+    typingStart: 6900,         // When typing "jmachina.io" begins
     typingSpeed: 150,          // Milliseconds per character
 
     // Calculated: logo typing end = typingStart + (11 chars * typingSpeed)
-    // = 7100 + (11 * 150) = 7100 + 1650 = 8750
-    // Blink cycles (3 cycles at 1000ms each) = 3000ms
-    // Navigation animation starts at 8750 + 3000 = 11750ms
-    navAnimationStart: 11750,  // Start revealing nav menu
+    // = 6900 + (11 * 150) = 6900 + 1650 = 8550
+    // Blink cycles (1.5 cycles at 1000ms each) = 1500ms
+    // Navigation animation starts at 8550 + 1500 = 10050ms
+    navAnimationStart: 10050,  // Start revealing nav menu
     navItemDelay: 250,        // Delay between each menu item reveal
 };
 
@@ -68,8 +66,6 @@ const logoText = document.getElementById('logo-text');
 const edgeCursor = document.getElementById('edge-cursor');
 const cursorLine5 = document.getElementById('cursor-line5');
 const cursorLine6 = document.getElementById('cursor-line6');
-const cursorLine7 = document.getElementById('cursor-line7');
-const cursorLine8 = document.getElementById('cursor-line8');
 const logoCursor = document.getElementById('logo-cursor');
 
 // Track if animation is complete
@@ -91,8 +87,6 @@ function completeBootAnimation() {
     edgeCursor.style.display = 'none';
     cursorLine5.style.display = 'none';
     cursorLine6.style.display = 'none';
-    cursorLine7.style.display = 'none';
-    cursorLine8.style.display = 'none';
     logoCursor.style.display = 'none';
 
     // Hide all navigation cursors
@@ -141,27 +135,11 @@ setTimeout(() => {
     document.querySelector('.boot-text.line-6').style.opacity = '1';
 }, BOOT_TIMING.cursorMoveLine6);
 
-// Move to line-7
+// Start typing the logo after line-6
 setTimeout(() => {
     if (bootAnimationComplete) return;
+    // Hide line-6 cursor, show logo cursor
     cursorLine6.style.display = 'none';
-    cursorLine7.classList.add('visible');
-    document.querySelector('.boot-text.line-7').style.opacity = '1';
-}, BOOT_TIMING.cursorMoveLine7);
-
-// Move to line-8 and start typing immediately (no separate logo line movement)
-setTimeout(() => {
-    if (bootAnimationComplete) return;
-    cursorLine7.style.display = 'none';
-    cursorLine8.classList.add('visible');
-    document.querySelector('.boot-text.line-8').style.opacity = '1';
-}, BOOT_TIMING.cursorMoveLine8);
-
-// Start typing the logo immediately after reaching line-8
-setTimeout(() => {
-    if (bootAnimationComplete) return;
-    // Hide line-8 cursor, show logo cursor
-    cursorLine8.style.display = 'none';
     logoCursor.style.display = 'inline-block';
     const text = "jmachina.io";
     let charIndex = 0;
@@ -230,10 +208,9 @@ setTimeout(() => {
                     // Continue to next item
                     setTimeout(revealNextNavItem, BOOT_TIMING.navItemDelay);
                 } else {
-                    // This is the last item (contact) - blink a few times before hiding
+                    // This is the last item (contact) - blink briefly before hiding
                     const lastCursor = navCursors[currentNavItem - 1];
-                    // Let it blink for 3.5 seconds to ensure we end on a visible phase
-                    // This gives 3 full cycles plus ending on visible
+                    // Let it blink for 1.5 seconds (1.5 cycles)
                     setTimeout(() => {
                         if (bootAnimationComplete) return;
                         lastCursor.style.display = 'none';
@@ -244,7 +221,7 @@ setTimeout(() => {
                         document.querySelectorAll('.reveal').forEach(element => {
                             element.classList.add('active');
                         });
-                    }, 3500);
+                    }, 1500);
                 }
             }, BOOT_TIMING.navItemDelay);
         }
