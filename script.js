@@ -68,6 +68,9 @@ const cursorLine5 = document.getElementById('cursor-line5');
 const cursorLine6 = document.getElementById('cursor-line6');
 const logoCursor = document.getElementById('logo-cursor');
 
+// Clear logo text for typewriter animation (text is in HTML for no-JS fallback)
+logoText.textContent = '';
+
 // Track if animation is complete
 let bootAnimationComplete = false;
 let allowUrlUpdates = false; // Prevent URL updates until user scrolls or animation completes
