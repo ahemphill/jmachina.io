@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="crt">
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+    <h1 class="sr-only">jmachina.io - µW-scale Intelligence Systems for Battery-Free ML at the Edge</h1>
+
     <div class="scanline"></div>
 
     <!-- Boot Sequence -->
@@ -33,12 +36,17 @@
             <li><a href="/contact">[ ./contact ]</a><span class="nav-cursor" id="nav-cursor-3"></span></li>
         </ul>
         <div class="theme-toggle">
-            <button class="light-theme-btn active" aria-label="Light theme" title="Light theme"></button>
-            <button class="dark-theme-btn" aria-label="Dark theme" title="Dark theme"></button>
+            <button class="light-theme-btn active" aria-label="Light theme" title="Light theme">
+                <span class="sr-only">Light theme</span>
+            </button>
+            <button class="dark-theme-btn" aria-label="Dark theme" title="Dark theme">
+                <span class="sr-only">Dark theme</span>
+            </button>
         </div>
     </nav>
 
     <!-- Main Content -->
+    <main id="main-content">
     <section id="about">
         <div class="container">
             <div class="reveal">
@@ -156,6 +164,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <footer>
         <div class="container">
