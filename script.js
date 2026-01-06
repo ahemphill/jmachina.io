@@ -12,9 +12,9 @@
 // ========================================
 const BOOT_TIMING = {
     // Text fade-in delays (must match CSS animation-delay values)
-    line2: 500,       // "Stealth is over."
-    line3: 2000,     // "Intelligence requires power."
-    line4: 3500,    // Highlighted line with cursor
+    line2: 375,       // "Stealth is over." (25% faster from original: 500 * 0.75)
+    line3: 1500,     // "Intelligence requires power." (25% faster from original: 2000 * 0.75)
+    line4: 2625,    // Highlighted line with cursor (25% faster from original: 3500 * 0.75)
 
     // Cursor movement delays - add blink time at line-4 before moving
     cursorBlinkAtLine4: 6500,  // Blink 3 times at end of line-4 (3 cycles at 500ms each = 1500ms)
@@ -70,28 +70,19 @@ const logoCursor = document.getElementById('logo-cursor');
 
 // Track if animation is complete
 let bootAnimationComplete = false;
+let allowUrlUpdates = false; // Prevent URL updates until user scrolls or animation completes
 
 // Function to skip to final state
 function completeBootAnimation() {
     if (bootAnimationComplete) return;
     bootAnimationComplete = true;
 
+    // Add class to trigger instant completion
+    document.body.classList.add('boot-complete');
+
     // Fade in all boot text smoothly
     document.querySelectorAll('.boot-text').forEach(el => {
-        el.style.animation = 'none';
-        el.style.transition = 'opacity 0.3s ease';
-        el.style.opacity = '1';
-    });
-
-    // Hide all cursors
-    edgeCursor.style.display = 'none';
-    cursorLine5.style.display = 'none';
-    cursorLine6.style.display = 'none';
-    logoCursor.style.display = 'none';
-
-    // Hide all navigation cursors
-    document.querySelectorAll('.nav-cursor').forEach(cursor => {
-        cursor.style.display = 'none';
+        el.classList.add('skip-animation');
     });
 
     // Complete logo typing with fade
@@ -101,7 +92,6 @@ function completeBootAnimation() {
     const navItems = document.querySelectorAll('nav ul li');
     navItems.forEach((item, index) => {
         setTimeout(() => {
-            item.style.transition = 'opacity 0.2s ease';
             item.classList.add('visible-nav-item');
         }, index * 50); // Stagger by 50ms each
     });
@@ -114,6 +104,11 @@ function completeBootAnimation() {
 
 // Detect scroll during animation - immediate response
 window.addEventListener('scroll', function() {
+    // Enable URL updates on first scroll
+    if (!allowUrlUpdates && window.scrollY > 10) {
+        allowUrlUpdates = true;
+    }
+
     if (!bootAnimationComplete && window.scrollY > 10) {
         completeBootAnimation();
     }
@@ -122,31 +117,28 @@ window.addEventListener('scroll', function() {
 // Keep cursor at line-4 blinking for a moment, then move to line-5
 setTimeout(() => {
     if (bootAnimationComplete) return;
-    edgeCursor.style.display = 'none';
+    edgeCursor.classList.add('hidden');
     cursorLine5.classList.add('visible');
-    document.querySelector('.boot-text.line-5').style.opacity = '1';
+    document.querySelector('.boot-text.line-5').classList.add('visible-line');
 }, BOOT_TIMING.cursorMoveLine5);
 
 // Move to line-6
 setTimeout(() => {
     if (bootAnimationComplete) return;
-    cursorLine5.style.display = 'none';
+    cursorLine5.classList.add('hidden');
     cursorLine6.classList.add('visible');
-    document.querySelector('.boot-text.line-6').style.opacity = '1';
+    document.querySelector('.boot-text.line-6').classList.add('visible-line');
 }, BOOT_TIMING.cursorMoveLine6);
 
 // Start typing the logo after line-6
 setTimeout(() => {
     if (bootAnimationComplete) return;
     // Hide line-6 cursor, show logo cursor
-    cursorLine6.style.display = 'none';
-    logoCursor.style.display = 'inline-block';
+    cursorLine6.classList.add('hidden');
+    logoCursor.classList.add('visible', 'typing');
+
     const text = "jmachina.io";
     let charIndex = 0;
-
-    // Stop blinking during typing - make cursor solid
-    logoCursor.style.animation = 'none';
-    logoCursor.style.opacity = '1';
 
     function typeCharacter() {
         if (bootAnimationComplete) return;
@@ -155,13 +147,9 @@ setTimeout(() => {
             charIndex++;
             setTimeout(typeCharacter, BOOT_TIMING.typingSpeed);
         } else {
-            // Resume blinking after typing is done - blink for 3 cycles before nav reveals
-            // Clear inline opacity so animation can control it
-            logoCursor.style.opacity = '';
-            // Force a reflow to restart the animation
-            logoCursor.style.animation = 'none';
-            void logoCursor.offsetWidth; // Trigger reflow
-            logoCursor.style.animation = 'blink 1s step-end infinite';
+            // Resume blinking after typing is done
+            logoCursor.classList.remove('typing');
+            logoCursor.classList.add('blinking');
         }
     }
 
@@ -180,7 +168,7 @@ setTimeout(() => {
     ];
 
     // Hide the logo cursor
-    logoCursor.style.display = 'none';
+    logoCursor.classList.add('hidden');
 
     // Animate through each menu item
     let currentNavItem = 0;
@@ -192,9 +180,7 @@ setTimeout(() => {
             navItems[currentNavItem].classList.add('visible-nav-item');
 
             // Show cursor next to the current item
-            navCursors[currentNavItem].style.display = 'inline-block';
-            navCursors[currentNavItem].style.opacity = '1';
-            navCursors[currentNavItem].style.animation = 'blink 1s step-end infinite';
+            navCursors[currentNavItem].classList.add('visible', 'blinking');
 
             // Move to next item after delay
             setTimeout(() => {
@@ -204,23 +190,26 @@ setTimeout(() => {
 
                 if (currentNavItem < navItems.length) {
                     // Hide current cursor completely
-                    navCursors[currentNavItem - 1].style.display = 'none';
+                    navCursors[currentNavItem - 1].classList.add('hidden');
                     // Continue to next item
                     setTimeout(revealNextNavItem, BOOT_TIMING.navItemDelay);
                 } else {
                     // This is the last item (contact) - blink briefly before hiding
                     const lastCursor = navCursors[currentNavItem - 1];
-                    // Let it blink for 1.5 seconds (1.5 cycles)
+
+                    // Reveal all content sections immediately when last nav item appears
+                    document.querySelectorAll('.reveal').forEach(element => {
+                        element.classList.add('active');
+                    });
+
+                    // Let cursor blink for 1.5 seconds (1.5 cycles) then hide and mark complete
                     setTimeout(() => {
                         if (bootAnimationComplete) return;
-                        lastCursor.style.display = 'none';
+                        lastCursor.classList.add('hidden');
                         // Mark animation as complete when all nav items are revealed
                         bootAnimationComplete = true;
-
-                        // Reveal all content sections after boot animation completes
-                        document.querySelectorAll('.reveal').forEach(element => {
-                            element.classList.add('active');
-                        });
+                        // Enable URL updates after boot animation completes
+                        allowUrlUpdates = true;
                     }, 1500);
                 }
             }, BOOT_TIMING.navItemDelay);
@@ -303,6 +292,8 @@ let updateTimeout = null;
 
 const sectionObserver = new IntersectionObserver((entries) => {
     if (isScrolling) return;
+    // Don't update URL until user scrolls or animation completes
+    if (!allowUrlUpdates) return;
 
     // Debounce updates to prevent flickering
     if (updateTimeout) {
@@ -413,6 +404,12 @@ function scrollToPath(path) {
 document.querySelectorAll('nav a').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
+
+        // Don't do anything if this is already the selected item
+        if (this.classList.contains('selected')) {
+            return;
+        }
+
         const path = this.getAttribute('href');
 
         // Disable scroll detection temporarily

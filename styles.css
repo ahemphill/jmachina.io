@@ -133,9 +133,9 @@ body::after {
 
 /* NOTE: Animation delays must match BOOT_TIMING config in <script> section */
 .boot-text.line-1 { animation-delay: 0s; }
-.boot-text.line-2 { animation-delay: 0.5s; margin-top: 2rem; }      /* BOOT_TIMING.line2 = 500ms */
-.boot-text.line-3 { animation-delay: 2.0s; }    /* BOOT_TIMING.line3 = 2000ms */
-.boot-text.line-4 { animation-delay: 3.5s; }    /* BOOT_TIMING.line4 = 3500ms */
+.boot-text.line-2 { animation-delay: 0.375s; margin-top: 2rem; }      /* BOOT_TIMING.line2 = 375ms */
+.boot-text.line-3 { animation-delay: 1.5s; }    /* BOOT_TIMING.line3 = 1500ms */
+.boot-text.line-4 { animation-delay: 2.625s; }    /* BOOT_TIMING.line4 = 2625ms */
 .boot-text.line-5 { animation-delay: 6.5s; opacity: 0; }
 .boot-text.line-6 { animation-delay: 6.5s; opacity: 0; }
 
@@ -169,10 +169,10 @@ body::after {
 }
 
 /* Cursor fades in with parent line-4 */
-/* NOTE: Delays must match BOOT_TIMING.line4 (3500ms) and fade-in duration (500ms) */
+/* NOTE: Delays must match BOOT_TIMING.line4 (2625ms) and fade-in duration (500ms) */
 .boot-text.line-4 .cursor {
     background: #f5f5f5;
-    animation: fadeIn .5s forwards 3.5s, blink 1s step-end infinite 4s;
+    animation: fadeIn .5s forwards 2.625s, blink 1s step-end infinite 3.125s;
 }
 
 /* Make empty lines visible with min-height */
@@ -186,6 +186,45 @@ body::after {
     51%, 100% { opacity: 0; }
 }
 
+/* Cursor states */
+.cursor.hidden,
+.nav-cursor.hidden {
+    display: none;
+}
+
+.cursor.typing {
+    display: inline-block;
+    opacity: 1;
+    animation: none;
+}
+
+.cursor.blinking,
+.nav-cursor.blinking {
+    display: inline-block;
+    opacity: 1;
+    animation: blink 1s step-end infinite;
+}
+
+/* Boot animation skip states */
+.boot-complete .cursor,
+.boot-complete .nav-cursor {
+    display: none;
+}
+
+.boot-text.skip-animation {
+    animation: none;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+.boot-text.visible-line {
+    opacity: 1;
+}
+
+nav ul li {
+    transition: opacity 0.2s ease;
+}
+
 .logo-link {
     text-decoration: none;
     color: inherit;
@@ -196,13 +235,31 @@ body::after {
     content: none !important;
 }
 
+nav a.logo-link {
+    opacity: 1;
+}
+
 .logo-text {
     display: inline-block;
     font-family: 'VT323', monospace;
     font-size: 1.5rem;
     font-weight: bold;
-    opacity: 1;
-    text-shadow: 0 0 1px rgba(42, 42, 42, 0.3);
+    color: #ff9500;
+    text-shadow: 0 0 1px rgba(255, 149, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.logo-link:hover .logo-text {
+    text-shadow: 0 0 2px rgba(255, 149, 0, 0.3);
+}
+
+body.dark-theme .logo-text {
+    color: #ffb000;
+    text-shadow: 0 0 3px #ffb000;
+}
+
+body.dark-theme .logo-link:hover .logo-text {
+    text-shadow: 0 0 5px #ffb000;
 }
 
 nav .logo-link + .cursor {
@@ -372,6 +429,10 @@ nav a:hover {
 nav a.selected {
     opacity: 1;
     text-shadow: 0 0 2px rgba(42, 42, 42, 0.3);
+}
+
+nav a.selected:hover {
+    cursor: default;
 }
 
 /* Mobile: stack menu items vertically */
@@ -588,6 +649,51 @@ button:hover {
     text-align: left;
 }
 
+/* Content links */
+section a {
+    color: #ff9500;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 149, 0, 0.3);
+    transition: text-decoration-color 0.2s ease;
+}
+
+section a:hover {
+    text-decoration-color: #ff9500;
+}
+
+body.dark-theme section a {
+    color: #ffb000;
+    text-decoration-color: rgba(255, 176, 0, 0.3);
+}
+
+body.dark-theme section a:hover {
+    text-decoration-color: #ffb000;
+}
+
+/* Footer */
+footer {
+    padding: 2rem 0 4rem 0;
+}
+
+footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer-cursor {
+    display: inline-block;
+    width: 0.6em;
+    height: 1.2em;
+    background: #2a2a2a;
+    animation: blink 1s step-end infinite;
+}
+
+body.dark-theme .footer-cursor {
+    background: #ffb000;
+    box-shadow: 0 0 12px rgba(255, 176, 0, 0.8);
+}
+
 /* Scanline effect */
 .scanline {
     width: 100%;
@@ -761,7 +867,7 @@ body.dark-theme nav a {
 }
 
 body.dark-theme nav a:hover {
-    text-shadow: 0 0 3px #ffb000;
+    text-shadow: 0 0 2px #ffb000;
 }
 
 body.dark-theme nav a.selected {
