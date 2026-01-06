@@ -109,17 +109,52 @@ function completeBootAnimation() {
     });
 }
 
-// Detect scroll during animation - immediate response
-window.addEventListener('scroll', function() {
+// Cache DOM elements for performance
+const nav = document.querySelector('nav');
+const revealElements = document.querySelectorAll('.reveal');
+const cachedSections = [
+    document.querySelector('.boot-screen'),
+    document.getElementById('about'),
+    document.getElementById('problem'),
+    document.getElementById('capabilities'),
+    document.getElementById('contact')
+];
+
+// Consolidated scroll handler for all scroll-based animations
+function handleScroll() {
+    const scrollY = window.scrollY;
+
     // Enable URL updates on first scroll
-    if (!allowUrlUpdates && window.scrollY > 10) {
+    if (!allowUrlUpdates && scrollY > 10) {
         allowUrlUpdates = true;
     }
 
-    if (!bootAnimationComplete && window.scrollY > 10) {
+    // Complete boot animation on scroll
+    if (!bootAnimationComplete && scrollY > 10) {
         completeBootAnimation();
     }
-}, { passive: true });
+
+    // Nav stuck detection
+    const navRect = nav.getBoundingClientRect();
+    if (navRect.top <= 1) {
+        nav.classList.add('stuck');
+    } else {
+        nav.classList.remove('stuck');
+    }
+
+    // Reveal animations
+    const windowHeight = window.innerHeight;
+    const revealPoint = 150;
+
+    revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        if (elementTop < windowHeight - revealPoint) {
+            element.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', handleScroll, { passive: true });
 
 // Keep cursor at line-4 blinking for a moment, then move to line-5
 setTimeout(() => {
@@ -267,37 +302,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Scroll reveal animations
-const reveals = document.querySelectorAll('.reveal');
-
-const revealOnScroll = () => {
-    const windowHeight = window.innerHeight;
-
-    reveals.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const revealPoint = 150;
-
-        if (elementTop < windowHeight - revealPoint) {
-            element.classList.add('active');
-        }
-    });
-};
-
-window.addEventListener('scroll', revealOnScroll);
-
-// Detect when nav becomes sticky and add border animation
-const nav = document.querySelector('nav');
-
-window.addEventListener('scroll', function() {
-    const navRect = nav.getBoundingClientRect();
-
-    // Nav is stuck when it's at or near the top of the viewport
-    if (navRect.top <= 1) {
-        nav.classList.add('stuck');
-    } else {
-        nav.classList.remove('stuck');
-    }
-});
+// Old scroll handlers removed - now consolidated in handleScroll() above
 
 // Update menu selection and URL based on scroll position
 let isScrolling = false;
@@ -314,19 +319,11 @@ const sectionObserver = new IntersectionObserver((entries) => {
     }
 
     updateTimeout = setTimeout(() => {
-        // Get all observed sections and find the most visible one
-        const sections = [
-            document.querySelector('.boot-screen'),
-            document.getElementById('about'),
-            document.getElementById('problem'),
-            document.getElementById('capabilities'),
-            document.getElementById('contact')
-        ];
-
+        // Use cached sections for performance
         let mostVisible = null;
         let maxVisibility = 0;
 
-        sections.forEach(section => {
+        cachedSections.forEach(section => {
             const rect = section.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
 
@@ -395,12 +392,8 @@ const sectionObserver = new IntersectionObserver((entries) => {
     threshold: [0, 0.25, 0.5, 0.75, 1.0]
 });
 
-// Observe all sections
-sectionObserver.observe(document.querySelector('.boot-screen'));
-sectionObserver.observe(document.getElementById('about'));
-sectionObserver.observe(document.getElementById('problem'));
-sectionObserver.observe(document.getElementById('capabilities'));
-sectionObserver.observe(document.getElementById('contact'));
+// Observe all sections using cached elements
+cachedSections.forEach(section => sectionObserver.observe(section));
 
 // Map paths to section IDs
 const pathToSection = {
