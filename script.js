@@ -80,6 +80,13 @@ function completeBootAnimation() {
     // Add class to trigger instant completion
     document.body.classList.add('boot-complete');
 
+    // Hide all boot animation cursors immediately
+    document.querySelectorAll('.cursor:not(.footer-cursor), .nav-cursor').forEach(cursor => {
+        cursor.classList.remove('visible', 'blinking');
+        cursor.classList.add('hidden');
+        cursor.style.display = 'none';  // Force hide with inline style
+    });
+
     // Fade in all boot text smoothly
     document.querySelectorAll('.boot-text').forEach(el => {
         el.classList.add('skip-animation');
@@ -208,6 +215,12 @@ setTimeout(() => {
                         lastCursor.classList.add('hidden');
                         // Mark animation as complete when all nav items are revealed
                         bootAnimationComplete = true;
+                        // Add boot-complete class to hide all boot cursors
+                        document.body.classList.add('boot-complete');
+                        // Force hide all boot cursors with inline styles
+                        document.querySelectorAll('.cursor:not(.footer-cursor), .nav-cursor').forEach(cursor => {
+                            cursor.style.display = 'none';
+                        });
                         // Enable URL updates after boot animation completes
                         allowUrlUpdates = true;
                     }, 1500);
@@ -317,16 +330,24 @@ const sectionObserver = new IntersectionObserver((entries) => {
             const rect = section.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
 
-            // Calculate how much of the section is in the viewport center area
+            // Calculate how much of the section is visible
             const sectionTop = rect.top;
             const sectionBottom = rect.bottom;
             const visibleTop = Math.max(sectionTop, 0);
             const visibleBottom = Math.min(sectionBottom, viewportHeight);
             const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
-            // Prioritize sections near the center of viewport
-            const centerDistance = Math.abs((sectionTop + sectionBottom) / 2 - viewportHeight / 2);
-            const visibility = visibleHeight / (1 + centerDistance / 100);
+            // If we're at the very top (scrollY < 50), strongly prefer boot screen
+            if (window.scrollY < 50 && section.classList.contains('boot-screen')) {
+                maxVisibility = Infinity;
+                mostVisible = section;
+                return;
+            }
+
+            // For section selection: prioritize sections that start near the top of viewport
+            // A section is "active" if its top is within the upper portion of the viewport
+            const topProximity = Math.max(0, 300 - Math.abs(sectionTop));
+            const visibility = visibleHeight * (1 + topProximity / 100);
 
             if (visibility > maxVisibility) {
                 maxVisibility = visibility;
