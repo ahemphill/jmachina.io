@@ -512,21 +512,40 @@ nav a.selected:hover {
 @media (max-width: 768px) {
     nav {
         padding: 1rem;
-        flex-direction: column;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
         gap: 0.75rem;
+        align-items: center;
+    }
+
+    nav .logo-link {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    nav .logo-link + .cursor {
+        grid-column: 1;
+        grid-row: 1;
+        position: absolute;
+        visibility: hidden;
+    }
+
+    nav .theme-toggle {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    nav.stuck .theme-toggle {
+        display: flex !important;
     }
 
     nav ul {
+        grid-column: 1 / -1;
+        grid-row: 2;
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-    }
-
-    .theme-toggle {
-        margin-left: 0;
-        order: -1;
-        align-self: flex-end;
     }
 }
 
